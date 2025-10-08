@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "395826173283",
+    "project_id": "renton-cd593",
+    "storage_bucket": "renton-cd593.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395826173283:android:8037bb9b69dde86f492f56",
+        "android_client_info": {
+          "package_name": "com.example.rent_on"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM98hGaaGbXn4-wgTmZgc_SsI0CQy4Qmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
