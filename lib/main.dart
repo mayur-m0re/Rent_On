@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:rent_on/screens/home/landing_home_screen.dart';
 
 import 'firebase_options.dart';
 import 'screens/auth/login_screen.dart';
@@ -25,16 +26,14 @@ class RentOnApp extends StatelessWidget {
   RentOnApp({super.key});
 
   final GoRouter _router = GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/home',
     routes: [
-      GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
-      GoRoute(path: '/signup', builder: (context, state) => SignupScreen()),
-      GoRoute(path: '/renter/home', builder: (context, state) => HomeScreen()),
-      GoRoute(
-        path: '/owner/dashboard',
-        builder: (context, state) => OwnerDashboard(),
-      ),
-      GoRoute(path: '/profile', builder: (context, state) => ProfileScreen()),
+      GoRoute(path: '/home', builder: (context, state) => const LandingHomeScreen()),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(path: '/signup', builder: (context, state) =>  const SignupScreen()),
+      GoRoute(path: '/renter/home', builder: (context, state) =>  HomeScreen()),
+      GoRoute(path: '/owner/dashboard', builder: (context, state) =>  OwnerDashboard()),
+      GoRoute(path: '/profile', builder: (context, state) =>  ProfileScreen()),
       GoRoute(
         path: '/item/:id',
         builder: (context, state) {
@@ -50,9 +49,8 @@ class RentOnApp extends StatelessWidget {
         },
       ),
     ],
-    // Optional: Add error handling
     errorBuilder: (context, state) =>
-        const Scaffold(body: Center(child: Text('Page Not Found'))),
+    const Scaffold(body: Center(child: Text('Page Not Found'))),
   );
 
   @override
@@ -67,9 +65,8 @@ class RentOnApp extends StatelessWidget {
           return MaterialApp.router(
             title: 'RentOn',
             theme: AppTheme.darkTheme,
-            routerConfig:
-                _router, // Use routerConfig instead of delegate/parser
-            restorationScopeId: 'rentonApp', // Enable state restoration
+            routerConfig: _router,
+            restorationScopeId: 'rentonApp',
           );
         },
       ),
