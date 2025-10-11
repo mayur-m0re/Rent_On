@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AuthWrapper extends StatelessWidget {
@@ -45,6 +45,7 @@ class AuthWrapper extends StatelessWidget {
             }
 
             final userType = userTypeSnapshot.data!;
+            print(userType);
             if (userType == 'owner') {
               Future.microtask(() => context.go('/owner/dashboard'));
             } else {
@@ -59,7 +60,9 @@ class AuthWrapper extends StatelessWidget {
   }
 
   Future<String> _getUserType(String uid) async {
-    final doc = await FirebaseAuth.instance.app
+    final doc = await FirebaseAuth
+        .instance
+        .app
         .options
         .projectId; // just to avoid null errors
     final firestore = FirebaseAuth.instance;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'electronics_screen.dart'; // Import the ElectronicsScreen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -23,19 +22,19 @@ class _HomeScreenState extends State<HomeScreen> {
       'title': '1BHK Apartment',
       'price': '₹10,000/month',
       'image':
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60'
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60',
     },
     {
       'title': 'Honda City 2022',
       'price': '₹2,500/day',
       'image':
-      'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=60'
+          'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=60',
     },
     {
       'title': 'iPhone 14 Pro',
       'price': '₹1,200/day',
       'image':
-      'https://images.unsplash.com/photo-1673435995151-8b5b90b3e8f9?auto=format&fit=crop&w=800&q=60'
+          'https://images.unsplash.com/photo-1673435995151-8b5b90b3e8f9?auto=format&fit=crop&w=800&q=60',
     },
   ];
 
@@ -94,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.grey.shade200,
                     blurRadius: 6,
                     offset: const Offset(0, 3),
-                  )
+                  ),
                 ],
               ),
               child: const TextField(
@@ -134,8 +133,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                              content: Text(
-                                  '${cat['label']} category coming soon!')),
+                            content: Text(
+                              '${cat['label']} category coming soon!',
+                            ),
+                          ),
                         );
                       }
                     },
@@ -148,14 +149,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.blueAccent.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child:
-                          Icon(cat['icon'], color: Colors.blueAccent, size: 32),
+                          child: Icon(
+                            cat['icon'],
+                            color: Colors.blueAccent,
+                            size: 32,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           cat['label'],
                           style: const TextStyle(
-                              color: Colors.black87, fontSize: 13),
+                            color: Colors.black87,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
@@ -186,7 +192,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   final item = featuredItems[index];
                   return GestureDetector(
                     onTap: () {
-                      context.go('/item/$index'); // Navigate to item detail page
+                      context.push(
+                        '/item/$index',
+                      ); // Navigate to item detail page
                     },
                     child: Container(
                       width: 220,
@@ -206,7 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           ClipRRect(
                             borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(16)),
+                              top: Radius.circular(16),
+                            ),
                             child: Image.network(
                               item['image'],
                               height: 150,
@@ -256,9 +265,18 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.blueAccent,
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Saved'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            label: 'Saved',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Profile',
+          ),
         ],
       ),
     );

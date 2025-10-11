@@ -31,16 +31,30 @@ class RentOnApp extends StatelessWidget {
   final GoRouter _router = GoRouter(
     initialLocation: '/auth',
     routes: [
-      GoRoute(path: '/home', builder: (context, state) => const LandingHomeScreen()),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => const LandingHomeScreen(),
+      ),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-      GoRoute(path: '/signup', builder: (context, state) =>  const SignupScreen()),
-      GoRoute(path: '/renter/home', builder: (context, state) =>  HomeScreen()),
-      GoRoute(path: '/owner/dashboard', builder: (context, state) =>  OwnerDashboard()),
-      GoRoute(path: '/profile', builder: (context, state) =>  ProfileScreen()),
-      GoRoute(path: '/owner/add-listing', builder: (context, state) => const AddListingScreen()),
-      GoRoute(path: '/auth', builder: (context, state) => const AuthWrapper(),),
-      GoRoute(path: '/electronics', builder: (context, state) => const ElectronicsScreen()),
-
+      GoRoute(
+        path: '/signup',
+        builder: (context, state) => const SignupScreen(),
+      ),
+      GoRoute(path: '/renter/home', builder: (context, state) => HomeScreen()),
+      GoRoute(
+        path: '/owner/dashboard',
+        builder: (context, state) => OwnerDashboard(),
+      ),
+      GoRoute(path: '/profile', builder: (context, state) => ProfileScreen()),
+      GoRoute(
+        path: '/owner/add-listing',
+        builder: (context, state) => const AddListingScreen(),
+      ),
+      GoRoute(path: '/auth', builder: (context, state) => const AuthWrapper()),
+      GoRoute(
+        path: '/electronics',
+        builder: (context, state) => const ElectronicsScreen(),
+      ),
 
       GoRoute(
         path: '/item/:id',
@@ -58,7 +72,7 @@ class RentOnApp extends StatelessWidget {
       ),
     ],
     errorBuilder: (context, state) =>
-    const Scaffold(body: Center(child: Text('Page Not Found'))),
+        const Scaffold(body: Center(child: Text('Page Not Found'))),
   );
 
   @override
@@ -74,6 +88,7 @@ class RentOnApp extends StatelessWidget {
             title: 'RentOn',
             theme: AppTheme.darkTheme,
             routerConfig: _router,
+            debugShowCheckedModeBanner: false,
             restorationScopeId: 'rentonApp',
           );
         },
