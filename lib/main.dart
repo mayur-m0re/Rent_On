@@ -26,14 +26,23 @@ class RentOnApp extends StatelessWidget {
   RentOnApp({super.key});
 
   final GoRouter _router = GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/login',
     routes: [
-      GoRoute(path: '/home', builder: (context, state) => const LandingHomeScreen()),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => const LandingHomeScreen(),
+      ),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-      GoRoute(path: '/signup', builder: (context, state) =>  const SignupScreen()),
-      GoRoute(path: '/renter/home', builder: (context, state) =>  HomeScreen()),
-      GoRoute(path: '/owner/dashboard', builder: (context, state) =>  OwnerDashboard()),
-      GoRoute(path: '/profile', builder: (context, state) =>  ProfileScreen()),
+      GoRoute(
+        path: '/signup',
+        builder: (context, state) => const SignupScreen(),
+      ),
+      GoRoute(path: '/renter/home', builder: (context, state) => HomeScreen()),
+      GoRoute(
+        path: '/owner/dashboard',
+        builder: (context, state) => OwnerDashboard(),
+      ),
+      GoRoute(path: '/profile', builder: (context, state) => ProfileScreen()),
       GoRoute(
         path: '/item/:id',
         builder: (context, state) {
@@ -50,7 +59,7 @@ class RentOnApp extends StatelessWidget {
       ),
     ],
     errorBuilder: (context, state) =>
-    const Scaffold(body: Center(child: Text('Page Not Found'))),
+        const Scaffold(body: Center(child: Text('Page Not Found'))),
   );
 
   @override

@@ -1,9 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rent_on/screens/owner/owner_dashboard.dart';
-import 'package:rent_on/screens/renter/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -31,36 +29,37 @@ class _LoginScreenState extends State<LoginScreen> {
         email: email.trim(),
         password: password.trim(),
       );
-
-      final userDoc = await _firestore
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .get();
-
-      final userType = userDoc['userType'] ?? 'renter';
-
-      if (userType == 'owner') {
-        context.go('/owner/dashboard');
-      } else {
-        context.go('/renter/home');
-      }
+      _getUserRole(userCredential.user?.uid);
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Login failed')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message ?? 'Login failed')));
     } finally {
       setState(() => isLoading = false);
     }
   }
 
+  Future<void> _getUserRole(userId) async {
+    final userDoc = await _firestore.collection('users').doc(userId).get();
+
+    final userType = userDoc['userType'] ?? 'renter';
+
+    if (userType == 'owner') {
+      context.go('/owner/dashboard');
+    } else {
+      context.go('/renter/home');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_auth.currentUser != null) {
+      _getUserRole(_auth.currentUser?.uid);
+    }
+
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -110,7 +109,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.email, color: Colors.white70),
+                        prefixIcon: const Icon(
+                          Icons.email,
+                          color: Colors.white70,
+                        ),
                         hintText: 'Email Address',
                         hintStyle: const TextStyle(color: Colors.white54),
                         filled: true,
@@ -121,12 +123,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(color: Colors.blueAccent),
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
                         ),
                       ),
                       onChanged: (value) => email = value,
                       validator: (value) =>
-                      value!.isEmpty ? 'Enter your email' : null,
+                          value!.isEmpty ? 'Enter your email' : null,
                     ),
                     const SizedBox(height: 16),
 
@@ -135,7 +139,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: const TextStyle(color: Colors.white),
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock, color: Colors.white70),
+                        prefixIcon: const Icon(
+                          Icons.lock,
+                          color: Colors.white70,
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword
@@ -159,12 +166,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(color: Colors.blueAccent),
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
                         ),
                       ),
                       onChanged: (value) => password = value,
                       validator: (value) =>
-                      value!.isEmpty ? 'Enter your password' : null,
+                          value!.isEmpty ? 'Enter your password' : null,
                     ),
                     const SizedBox(height: 30),
 
@@ -174,16 +183,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: isLoading ? null : _login,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          padding: EdgeInsets.zero,
-                          backgroundColor: Colors.transparent,
-                        ).copyWith(
-                          backgroundColor: WidgetStateProperty.all(Colors.transparent),
-                          shadowColor: WidgetStateProperty.all(Colors.transparent),
-                        ),
+                        style:
+                            ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              padding: EdgeInsets.zero,
+                              backgroundColor: Colors.transparent,
+                            ).copyWith(
+                              backgroundColor: WidgetStateProperty.all(
+                                Colors.transparent,
+                              ),
+                              shadowColor: WidgetStateProperty.all(
+                                Colors.transparent,
+                              ),
+                            ),
                         child: Ink(
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
@@ -196,15 +210,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Container(
                             alignment: Alignment.center,
                             child: isLoading
-                                ? const CircularProgressIndicator(color: Colors.white)
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
                                 : const Text(
-                              'Login',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                                    'Login',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                         ),
                       ),

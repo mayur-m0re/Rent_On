@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rent_on/services/auth_service.dart';
 
 class LandingHomeScreen extends StatelessWidget {
   const LandingHomeScreen({Key? key}) : super(key: key);
@@ -13,6 +14,8 @@ class LandingHomeScreen extends StatelessWidget {
       {'icon': Icons.chair_alt, 'label': 'Furniture'},
       {'icon': Icons.pedal_bike, 'label': 'Bikes'},
     ];
+
+    final auth = AuthService();
 
     return Scaffold(
       body: Container(
@@ -42,10 +45,12 @@ class LandingHomeScreen extends StatelessWidget {
                         letterSpacing: 1.2,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => context.go('/login'),
-                      icon: const Icon(Icons.login, color: Colors.white),
-                    )
+                    auth.user != null
+                        ? IconButton(
+                            onPressed: () => context.go('/login'),
+                            icon: const Icon(Icons.login, color: Colors.white),
+                          )
+                        : Container(),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -109,8 +114,11 @@ class LandingHomeScreen extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(cat['icon'] as IconData,
-                                color: Colors.lightBlueAccent, size: 32),
+                            Icon(
+                              cat['icon'] as IconData,
+                              color: Colors.lightBlueAccent,
+                              size: 32,
+                            ),
                             const SizedBox(height: 10),
                             Text(
                               cat['label'] as String,
@@ -129,47 +137,56 @@ class LandingHomeScreen extends StatelessWidget {
                 const Spacer(),
 
                 // 🚀 Login / Signup Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => context.go('/login'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white.withOpacity(0.15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                auth.user == null
+                    ? Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () => context.go('/login'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white.withOpacity(0.15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                              ),
+                              child: const Text(
+                                'Login',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => context.go('/signup'),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () => context.go('/signup'),
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                backgroundColor: const Color(0xFF0072FF),
+                              ),
+                              child: const Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                          backgroundColor: const Color(0xFF0072FF),
-                        ),
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                        ],
+                      )
+                    : Container(),
                 const SizedBox(height: 20),
               ],
             ),

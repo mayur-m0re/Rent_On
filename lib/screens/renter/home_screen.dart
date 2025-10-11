@@ -24,19 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
       'title': '1BHK Apartment',
       'price': '₹10,000/month',
       'image':
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60'
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60',
     },
     {
       'title': 'Honda City 2022',
       'price': '₹2,500/day',
       'image':
-      'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=60'
+          'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=60',
     },
     {
       'title': 'iPhone 14 Pro',
       'price': '₹1,200/day',
       'image':
-      'https://images.unsplash.com/photo-1673435995151-8b5b90b3e8f9?auto=format&fit=crop&w=800&q=60'
+          'https://rukminim2.flixcart.com/image/480/640/xif0q/mobile/6/x/j/-original-imaghxejqvpwfqh2.jpeg?q=90',
     },
   ];
 
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.grey.shade200,
                     blurRadius: 6,
                     offset: const Offset(0, 3),
-                  )
+                  ),
                 ],
               ),
               child: const TextField(
@@ -138,12 +138,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.blueAccent.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Icon(cat['icon'], color: Colors.blueAccent, size: 32),
+                        child: Icon(
+                          cat['icon'],
+                          color: Colors.blueAccent,
+                          size: 32,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         cat['label'],
-                        style: const TextStyle(color: Colors.black87, fontSize: 13),
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   );
@@ -194,8 +201,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ClipRRect(
-                            borderRadius:
-                            const BorderRadius.vertical(top: Radius.circular(16)),
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(16),
+                            ),
                             child: Image.network(
                               item['image'],
                               height: 150,
@@ -246,9 +254,18 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.blueAccent,
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Saved'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            label: 'Saved',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Profile',
+          ),
         ],
       ),
     );
