@@ -2,7 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:rent_on/screens/auth_wrapper.dart';
 import 'package:rent_on/screens/home/landing_home_screen.dart';
+import 'package:rent_on/screens/owner/add_listing_screen.dart';
+import 'package:rent_on/screens/renter/electronics_screen.dart';
 
 import 'firebase_options.dart';
 import 'screens/auth/login_screen.dart';
@@ -26,23 +29,19 @@ class RentOnApp extends StatelessWidget {
   RentOnApp({super.key});
 
   final GoRouter _router = GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/auth',
     routes: [
-      GoRoute(
-        path: '/home',
-        builder: (context, state) => const LandingHomeScreen(),
-      ),
+      GoRoute(path: '/home', builder: (context, state) => const LandingHomeScreen()),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-      GoRoute(
-        path: '/signup',
-        builder: (context, state) => const SignupScreen(),
-      ),
-      GoRoute(path: '/renter/home', builder: (context, state) => HomeScreen()),
-      GoRoute(
-        path: '/owner/dashboard',
-        builder: (context, state) => OwnerDashboard(),
-      ),
-      GoRoute(path: '/profile', builder: (context, state) => ProfileScreen()),
+      GoRoute(path: '/signup', builder: (context, state) =>  const SignupScreen()),
+      GoRoute(path: '/renter/home', builder: (context, state) =>  HomeScreen()),
+      GoRoute(path: '/owner/dashboard', builder: (context, state) =>  OwnerDashboard()),
+      GoRoute(path: '/profile', builder: (context, state) =>  ProfileScreen()),
+      GoRoute(path: '/owner/add-listing', builder: (context, state) => const AddListingScreen()),
+      GoRoute(path: '/auth', builder: (context, state) => const AuthWrapper(),),
+      GoRoute(path: '/electronics', builder: (context, state) => const ElectronicsScreen()),
+
+
       GoRoute(
         path: '/item/:id',
         builder: (context, state) {
@@ -59,7 +58,7 @@ class RentOnApp extends StatelessWidget {
       ),
     ],
     errorBuilder: (context, state) =>
-        const Scaffold(body: Center(child: Text('Page Not Found'))),
+    const Scaffold(body: Center(child: Text('Page Not Found'))),
   );
 
   @override

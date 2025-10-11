@@ -13,9 +13,9 @@ class OwnerDashboard extends StatefulWidget {
 class _OwnerDashboardState extends State<OwnerDashboard> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+
   bool isLoading = true;
   String? email;
-
   List<Map<String, dynamic>> myListings = [];
 
   @override
@@ -46,8 +46,10 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
         'id': doc.id,
         'title': doc['title'],
         'price': doc['price'],
-        'image': doc['imageUrl'] ??
-            'https://via.placeholder.com/150?text=No+Image',
+        'location': doc['description'] ?? 'Unknown',
+        'image': doc['imageUrls'] != null && doc['imageUrls'].isNotEmpty
+            ? doc['imageUrls'][0]
+            : 'https://via.placeholder.com/150?text=No+Image',
       })
           .toList();
 
@@ -69,195 +71,169 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: const Color(0xFFF7F8FA),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
+        elevation: 1,
         title: const Text(
           'Owner Dashboard',
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black54),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black54),
           onPressed: () => context.go('/login'),
         ),
         actions: [
           IconButton(
             onPressed: _logout,
             icon: const Icon(Icons.logout, color: Colors.redAccent),
+            tooltip: 'Logout',
           ),
         ],
       ),
+
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          final newListing = await context.push('/owner/add-listing');
+          if (newListing != null) {
+            setState(() {
+              myListings.add(newListing as Map<String, dynamic>);
+            });
+          }
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('Add Listing'),
+        backgroundColor: Colors.blueAccent,
+      ),
+
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 👤 Owner Info
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade200,
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundColor: Colors.blueAccent.withOpacity(0.1),
-                    child: const Icon(Icons.person,
-                        color: Colors.blueAccent, size: 32),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(email ?? 'Owner',
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600)),
-                        const SizedBox(height: 4),
-                        const Text('Property Owner',
-                            style: TextStyle(
-                                fontSize: 13, color: Colors.grey)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // 📊 Stats Overview
-            const Text(
-              'Dashboard Overview',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87),
-            ),
-            const SizedBox(height: 12),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildStatCard('Active Listings', myListings.length.toString(),
-                    Icons.list_alt),
-                _buildStatCard('Total Views', '1.2k', Icons.visibility_outlined),
-                _buildStatCard('Bookings', '8', Icons.book_online_outlined),
-              ],
-            ),
-
-            const SizedBox(height: 24),
-
-            // 🏠 My Listings
-            const Text(
-              'My Listings',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87),
-            ),
-            const SizedBox(height: 12),
-
-            if (myListings.isEmpty)
-              Center(
-                child: Column(
+          : RefreshIndicator(
+        onRefresh: () => _fetchListings(_auth.currentUser!.uid),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Owner Info
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 10, offset: const Offset(0, 4))],
+                ),
+                child: Row(
                   children: [
-                    const SizedBox(height: 40),
-                    const Icon(Icons.hourglass_empty,
-                        size: 64, color: Colors.grey),
-                    const SizedBox(height: 12),
-                    const Text('No listings yet!',
-                        style:
-                        TextStyle(fontSize: 16, color: Colors.grey)),
-                    const SizedBox(height: 16),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Add navigation to Add Listing page (optional)
-                      },
-                      icon: const Icon(Icons.add, color: Colors.white),
-                      label: const Text('Add New Listing'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                    CircleAvatar(
+                      radius: 32,
+                      backgroundColor: Colors.blueAccent.withOpacity(0.1),
+                      child: const Icon(Icons.person, color: Colors.blueAccent, size: 36),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(email ?? 'Owner',
+                              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+                          const SizedBox(height: 4),
+                          const Text('Property Owner',
+                              style: TextStyle(fontSize: 13, color: Colors.grey)),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              )
-            else
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: myListings.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final item = myListings[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade200,
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
+              ),
+
+              const SizedBox(height: 28),
+
+              // Stats
+              const Text('Dashboard Overview',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black87)),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  _buildStatCard('Listings', myListings.length.toString(), Icons.home_work_outlined),
+                  _buildStatCard('Bookings', '0', Icons.book_online),
+                  _buildStatCard('Views', '0', Icons.visibility_outlined),
+                ],
+              ),
+
+              const SizedBox(height: 28),
+
+              // My Listings
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('My Listings',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black87)),
+                  TextButton.icon(
+                    onPressed: () async {
+                      final newListing = await context.push('/owner/add-listing');
+                      if (newListing != null) {
+                        setState(() {
+                          myListings.add(newListing as Map<String, dynamic>);
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.blueAccent),
+                    label: const Text('Add'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              if (myListings.isEmpty)
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Column(
+                      children: const [
+                        Icon(Icons.hourglass_empty, size: 70, color: Colors.grey),
+                        SizedBox(height: 12),
+                        Text('No listings yet!', style: TextStyle(fontSize: 16, color: Colors.grey)),
                       ],
                     ),
-                    child: ListTile(
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          item['image'],
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
+                  ),
+                )
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: myListings.length,
+                  itemBuilder: (context, index) {
+                    final item = myListings[index];
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 14),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 8, offset: const Offset(0, 4))],
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(12),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            item['image'],
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                          ),
                         ),
+                        title: Text(item['title']),
+                        subtitle: Text('${item['location']} • ₹${item['price']}'),
                       ),
-                      title: Text(
-                        item['title'],
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: Text(
-                        item['price'],
-                        style: const TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.grey),
-                        onPressed: () {
-                          // Edit listing functionality
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-          ],
+                    );
+                  },
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -267,29 +243,19 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade200,
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 8, offset: const Offset(0, 4))],
         ),
         child: Column(
           children: [
             Icon(icon, color: Colors.blueAccent, size: 28),
             const SizedBox(height: 8),
-            Text(value,
-                style: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(value, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
-            Text(title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13, color: Colors.grey)),
+            Text(title, style: const TextStyle(fontSize: 13, color: Colors.grey)),
           ],
         ),
       ),
