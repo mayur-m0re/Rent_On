@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'electronics_screen.dart'; // Import the ElectronicsScreen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,11 +13,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Map<String, dynamic>> categories = [
-    {'icon': Icons.home_outlined, 'label': 'Apartments'},
-    {'icon': Icons.directions_car, 'label': 'Cars'},
     {'icon': Icons.chair_alt, 'label': 'Furniture'},
     {'icon': Icons.devices_other, 'label': 'Electronics'},
-    {'icon': Icons.pedal_bike, 'label': 'Bikes'},
+    {'icon': Icons.pedal_bike, 'label': 'Tools'},
   ];
 
   final List<Map<String, dynamic>> featuredItems = [
@@ -47,12 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
       // Home
       context.go('/renter/home');
     } else if (index == 1) {
-      // Saved (you can add functionality later)
+      // Saved
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Saved items feature coming soon!')),
       );
     } else if (index == 2) {
-      // ✅ Navigate to Profile screen
+      // Profile
       context.go('/profile');
     }
   }
@@ -79,13 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🔍 Search Bar
+            // Search Bar
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
@@ -107,10 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 20),
 
-            // 🏷 Categories
+            // Categories
             const Text(
               'Categories',
               style: TextStyle(
@@ -129,31 +126,46 @@ class _HomeScreenState extends State<HomeScreen> {
                 separatorBuilder: (_, __) => const SizedBox(width: 14),
                 itemBuilder: (context, index) {
                   final cat = categories[index];
-                  return Column(
-                    children: [
-                      Container(
-                        height: 70,
-                        width: 70,
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(16),
+                  return GestureDetector(
+                    onTap: () {
+                      if (cat['label'] == 'Electronics') {
+                        // Navigate to Electronics screen
+                        context.go('/electronics');
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  '${cat['label']} category coming soon!')),
+                        );
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 70,
+                          width: 70,
+                          decoration: BoxDecoration(
+                            color: Colors.blueAccent.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child:
+                          Icon(cat['icon'], color: Colors.blueAccent, size: 32),
                         ),
-                        child: Icon(cat['icon'], color: Colors.blueAccent, size: 32),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        cat['label'],
-                        style: const TextStyle(color: Colors.black87, fontSize: 13),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        Text(
+                          cat['label'],
+                          style: const TextStyle(
+                              color: Colors.black87, fontSize: 13),
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
             ),
-
             const SizedBox(height: 25),
 
-            // 🌟 Featured Section
+            // Featured Rentals
             const Text(
               'Featured Rentals',
               style: TextStyle(
@@ -174,8 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   final item = featuredItems[index];
                   return GestureDetector(
                     onTap: () {
-                      // Navigate to item detail page
-                      context.go('/item/$index');
+                      context.go('/item/$index'); // Navigate to item detail page
                     },
                     child: Container(
                       width: 220,
@@ -194,8 +205,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ClipRRect(
-                            borderRadius:
-                            const BorderRadius.vertical(top: Radius.circular(16)),
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(16)),
                             child: Image.network(
                               item['image'],
                               height: 150,
@@ -239,7 +250,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      // 🔽 Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onNavItemTapped,
