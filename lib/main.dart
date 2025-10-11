@@ -15,7 +15,6 @@ import 'screens/item_details_wrapper.dart';
 import 'screens/owner/owner_dashboard.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/renter/home_screen.dart';
-import 'screens/utils/theme.dart';
 import 'services/auth_service.dart';
 import 'services/firestore_service.dart';
 
@@ -86,7 +85,6 @@ class RentOnApp extends StatelessWidget {
         builder: (context, auth, _) {
           return MaterialApp.router(
             title: 'RentOn',
-            theme: AppTheme.darkTheme,
             routerConfig: _router,
             debugShowCheckedModeBanner: false,
             restorationScopeId: 'rentonApp',

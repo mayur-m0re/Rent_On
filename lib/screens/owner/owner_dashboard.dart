@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
   bool isLoading = true;
   String? email;
   List<Map<String, dynamic>> myListings = [];
+  late DocumentSnapshot<Map<String, dynamic>> userData;
 
   @override
   void initState() {
@@ -29,7 +32,6 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
     if (user != null) {
       setState(() => email = user.email);
       await _fetchOwnerDetails(user.uid);
-      await _fetchListings(user.uid);
     } else {
       context.go('/login');
     }
@@ -37,8 +39,9 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
 
   Future<void> _fetchOwnerDetails(String ownerId) async {
     try {
-      final snapshot = await _firestore.collection('users').doc(ownerId).get();
-      email = snapshot.get("email");
+      userData = await _firestore.collection('users').doc(ownerId).get();
+      email = userData.get("email");
+      await _fetchListings(userData.id);
     } catch (e) {
       print('Error loading Owner Details: $e');
       setState(() => isLoading = false);
@@ -56,16 +59,19 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
           .map(
             (doc) => {
               'id': doc.id,
-              'title': doc['title'],
-              'price': doc['price'],
+              'title': doc.get('title'),
+              'price': doc.get('price'),
               'location': doc['description'] ?? 'Unknown',
-              'image': doc['imageUrls'] != null && doc['imageUrls'].isNotEmpty
-                  ? doc['imageUrls'][0]
-                  : 'https://via.placeholder.com/150?text=No+Image',
+              'image':
+                  doc.get('imageUrls') != null &&
+                      (doc['imageUrls'] as List).isNotEmpty
+                  ? doc.get('imageUrls')[0]
+                  : 'https://media.wired.com/photos/632119a7f1e5c40d2b1bc647/master/pass/iPhone-14-Pro-Review-Gear.jpg',
             },
           )
           .toList();
 
+      log(data.toString());
       setState(() {
         myListings = data;
         isLoading = false;
@@ -97,10 +103,6 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black54),
-          onPressed: () => context.go('/login'),
-        ),
         actions: [
           IconButton(
             onPressed: _logout,
@@ -127,7 +129,7 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
-              onRefresh: () => _fetchListings(_auth.currentUser!.uid),
+              onRefresh: () => _fetchListings(userData.id),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(
@@ -305,9 +307,16 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              title: Text(item['title']),
+                              title: Text(
+                                item['title'],
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               subtitle: Text(
                                 '${item['location']} • ₹${item['price']}',
+                                style: TextStyle(fontSize: 14),
                               ),
                             ),
                           );

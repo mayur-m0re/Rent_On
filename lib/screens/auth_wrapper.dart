@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -60,13 +61,14 @@ class AuthWrapper extends StatelessWidget {
   }
 
   Future<String> _getUserType(String uid) async {
-    final doc = await FirebaseAuth
-        .instance
-        .app
-        .options
-        .projectId; // just to avoid null errors
-    final firestore = FirebaseAuth.instance;
+    final auth = FirebaseAuth.instance;
+    final firestore = FirebaseFirestore.instance;
+    final snapshot = await firestore
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .get();
+
     // Wait, that’s wrong — we’ll fix below
-    return 'renter';
+    return snapshot.get('userType');
   }
 }
