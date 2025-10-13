@@ -19,22 +19,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Map<String, dynamic>> featuredItems = [
     {
-      'title': '1BHK Apartment',
-      'price': '₹10,000/month',
+      'title': 'Electronics',
+      'price': '₹5,000/month',
       'image':
-          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60',
+          'https://cdn-icons-png.flaticon.com/512/1555/1555401.png',
     },
     {
-      'title': 'Honda City 2022',
-      'price': '₹2,500/day',
+      'title': 'Tools',
+      'price': '₹200/day',
       'image':
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=800&q=60',
+          'https://cdn-icons-png.flaticon.com/512/5109/5109515.png',
     },
     {
-      'title': 'iPhone 14 Pro',
-      'price': '₹1,200/day',
+      'title': 'Camera',
+      'price': '₹600/day',
       'image':
-          'https://images.unsplash.com/photo-1673435995151-8b5b90b3e8f9?auto=format&fit=crop&w=800&q=60',
+          'https://static.vecteezy.com/system/resources/previews/006/998/431/non_2x/photo-camera-icons-photo-camera-icon-design-illustration-photo-camera-simple-sign-photo-camera-image-vector.jpg',
     },
   ];
 
