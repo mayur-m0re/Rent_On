@@ -10,55 +10,55 @@ class ElectronicsScreen extends StatelessWidget {
       'title': 'Camera & Photography Equipment',
       'desc': 'Professional cameras and accessories',
       'image':
-      'https://images.unsplash.com/photo-1673435995151-8b5b90b3e8f9?auto=format&fit=crop&w=800&q=60'
+      'https://vectips.com/wp-content/uploads/2017/03/project-preview-large-2.png'
     },
     {
       'title': 'Power Tools & Hardware',
       'desc': 'Durable tools for all projects',
       'image':
-      'https://images.unsplash.com/photo-1587825140708-636a4d07311f?auto=format&fit=crop&w=800&q=60'
+      'https://cdn-icons-png.flaticon.com/512/4647/4647569.png'
     },
     {
       'title': 'Computers & IT Equipment',
       'desc': 'High-performance computing gear',
       'image':
-      'https://images.unsplash.com/photo-1519183071298-a2962f1e2b1b?auto=format&fit=crop&w=800&q=60'
+      'https://cdn-icons-png.flaticon.com/512/3527/3527362.png'
     },
     {
       'title': 'Audio & Visual Equipment',
       'desc': 'Premium sound and display systems',
       'image':
-      'https://images.unsplash.com/photo-1590650046871-92c887180603?auto=format&fit=crop&w=800&q=60'
+      'https://media.istockphoto.com/id/1999495160/vector/audio-visual-and-headphone-icon-concept.jpg?s=612x612&w=0&k=20&c=WidXoxO6J4Lf0-UAY6gGQSzCqE_FAjeaJTK91hBegu0='
     },
     {
       'title': 'Industrial & Construction Equipment',
       'desc': 'Heavy-duty machinery',
       'image':
-      'https://images.unsplash.com/photo-1504307651254-35680f3567d7?auto=format&fit=crop&w=800&q=60'
+      'https://as1.ftcdn.net/jpg/04/77/98/54/1000_F_477985463_bLGK7m8X1WEocr06NjnH6qWUA10ef7jV.jpg'
     },
     {
       'title': 'Lab & Technical Equipment',
       'desc': 'Precision instruments for research',
       'image':
-      'https://images.unsplash.com/photo-1584479635035-3b2d5898e2a0?auto=format&fit=crop&w=800&q=60'
+      'https://cdn-icons-png.freepik.com/512/7918/7918229.png'
     },
     {
       'title': 'Consumer Electronics',
       'desc': 'Everyday tech essentials',
       'image':
-      'https://images.unsplash.com/photo-1550009158-9c7069c0a0c8?auto=format&fit=crop&w=800&q=60'
+      'https://cdn-icons-png.flaticon.com/512/11495/11495804.png'
     },
     {
       'title': 'Event Equipment',
       'desc': 'Gear for memorable events',
       'image':
-      'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=60'
+      'https://cdn-icons-png.flaticon.com/512/2037/2037682.png'
     },
     {
       'title': 'Electrical & Climate Control Equipment',
       'desc': 'Climate solutions and electrical gear',
       'image':
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60'
+      'https://static.vecteezy.com/system/resources/previews/051/837/396/non_2x/a-vacuum-cleaner-with-a-snowflake-on-it-free-vector.jpg'
     },
   ];
 

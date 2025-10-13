@@ -31,6 +31,7 @@ class _OwnerDashboardState extends State<OwnerDashboard> {
     final user = _auth.currentUser;
     if (user != null) {
       setState(() => email = user.email);
+      
       await _fetchOwnerDetails(user.uid);
     } else {
       context.go('/login');
